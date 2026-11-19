@@ -1,0 +1,632 @@
+package com.example.salesmodelapp
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.salesmodelapp.ui.theme.SalesModelAppTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            SalesModelAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Greeting (modifier: Modifier = Modifier)
+{
+
+    val productViewModel= remember {ProductViewModel()}
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "first")
+    {
+        composable(route = "first"){
+            FirstScreen(
+               productViewModel,
+                navController
+            )
+        }
+        composable(route = "second"){
+            SecondScreen(
+                productViewModel,
+                navController
+            )
+        }
+        composable(route = "third"){ThirdScreen(productViewModel,navController)}
+        composable(route = "fourth"){FourthScreen(productViewModel, navController)}
+        composable(route = "fifth"){FifthScreen(productViewModel, navController)}
+    }
+
+}
+
+
+class ProductViewModel: ViewModel()
+{
+    var product by mutableStateOf("")
+    var price by mutableStateOf("")
+    var quantity by mutableStateOf("")
+    var cost by mutableStateOf("")
+    var tax by mutableStateOf("")
+    var discount by mutableStateOf("")
+    var totalcost by mutableStateOf("")
+    var netcost by mutableStateOf("")
+}
+
+
+@Composable
+fun FirstScreen(productViewModel: ProductViewModel, navController: NavController)
+{
+    Column(
+        verticalArrangement=Arrangement.SpaceEvenly,
+        horizontalAlignment=Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        Text(
+            text="FIRST SCREEN",
+            fontSize = 40.sp
+        )
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="PRODUCT",
+                fontSize = 30.sp
+            )
+
+            TextField(
+                value=productViewModel.product,
+                onValueChange={productViewModel.product=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="PRICE",
+                fontSize = 30.sp
+
+            )
+
+            TextField(
+                value=productViewModel.price,
+                onValueChange={productViewModel.price=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Button(
+                onClick = {navController.navigate(route = "second")}
+            )
+            {
+                Text(
+                    text="NEXT",
+                    fontSize = 30.sp
+                )
+            }
+
+            Button(
+                onClick = {navController.popBackStack()}
+            )
+            {
+                Text(
+                    text="CLOSE",
+                    fontSize = 30.sp
+                )
+            }
+
+
+        }
+
+    }
+}
+
+@Composable
+fun SecondScreen(productViewModel: ProductViewModel, navController: NavController)
+{
+    var costvalue by remember {mutableStateOf("")}
+    //reading the value of price abd qty
+    var priceDouble = productViewModel.price.toDoubleOrNull()?:0.0
+    var quantityDouble = productViewModel.quantity.toDoubleOrNull()?:0.0
+    //calcute cost value
+    var costDouble=priceDouble*quantityDouble
+    //display the cost in textfield
+    costvalue=costDouble.toString()
+    //update cost property of viewmodel
+    productViewModel.cost=costvalue
+
+
+
+    Column(
+        verticalArrangement=Arrangement.SpaceEvenly,
+        horizontalAlignment=Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        Text(
+            text="SECOND SCREEN",
+            fontSize = 40.sp
+        )
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="QUANTITY",
+                fontSize = 30.sp
+            )
+
+            TextField(
+                value=productViewModel.quantity,
+                onValueChange={productViewModel.quantity=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="COST",
+                fontSize = 30.sp
+
+            )
+
+            TextField(
+                value=costvalue,
+                onValueChange={costvalue=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Button(
+                onClick = {navController.navigate(route = "first")}
+            )
+            {
+                Text(
+                    text="BACK",
+                    fontSize = 30.sp
+                )
+            }
+
+            Button(
+                onClick = {navController.navigate(route = "third")}
+            )
+            {
+                Text(
+                    text="NEXT",
+                    fontSize = 30.sp
+                )
+            }
+
+
+        }
+
+    }
+}
+
+
+@Composable
+fun ThirdScreen(productViewModel: ProductViewModel, navController: NavController)
+{
+    //no manual data entry
+    //declare variables using by remember
+    var taxvalue by remember { mutableStateOf("") }
+    var discountvalue by remember { mutableStateOf("") }
+    // read cost value from view model
+    var costDouble= productViewModel.cost.toDoubleOrNull()?:0.0
+    //use the value of cost to calculate tax and discount
+    var taxDouble= 0.18* costDouble
+    var discountDouble = 0.10*costDouble
+    //display the tax and discount in their text fields
+    taxvalue = taxDouble.toString()
+    discountvalue=discountDouble.toString()
+    //update the tax and discount properties
+    productViewModel.tax=taxvalue
+    productViewModel.discount=discountvalue
+
+    Column(
+        verticalArrangement=Arrangement.SpaceEvenly,
+        horizontalAlignment=Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        Text(
+            text="THIRD SCREEN",
+            fontSize = 40.sp
+        )
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="TAX",
+                fontSize = 30.sp
+            )
+
+            TextField(
+                value=taxvalue,
+                onValueChange={taxvalue=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="DISCOUNT",
+                fontSize = 30.sp
+
+            )
+
+            TextField(
+                value=discountvalue,
+                onValueChange={discountvalue=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Button(
+                onClick = {navController.navigate(route = "second")}
+            )
+            {
+                Text(
+                    text="BACK",
+                    fontSize = 30.sp
+                )
+            }
+
+            Button(
+                onClick = {navController.navigate(route = "fourth")}
+            )
+            {
+                Text(
+                    text="NEXT",
+                    fontSize = 30.sp
+                )
+            }
+
+
+        }
+
+    }
+}
+
+@Composable
+fun FourthScreen(productViewModel: ProductViewModel, navController: NavController)
+{
+    //no manual data entry
+    //declare variables using by remember
+    var totalcostvalue by remember { mutableStateOf("") }
+    var netcostvalue by remember { mutableStateOf("") }
+    // read cost value, discount and tax value from view model
+    var costDouble= productViewModel.cost.toDoubleOrNull()?:0.0
+    var taxDouble = productViewModel.tax.toDoubleOrNull()?:0.0
+    var discountDouble = productViewModel.discount.toDoubleOrNull()?:0.0
+
+    //use the value of cost to calculate tax and discount
+    var totalcostDouble= costDouble+taxDouble
+    var netcostDouble = totalcostDouble-discountDouble
+    //display the total and netcosts in their text fields
+    totalcostvalue = totalcostDouble.toString()
+    netcostvalue=netcostDouble.toString()
+    //update the tax and discount properties
+    productViewModel.totalcost=totalcostvalue
+    productViewModel.netcost=netcostvalue
+
+    Column(
+        verticalArrangement=Arrangement.SpaceEvenly,
+        horizontalAlignment=Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        Text(
+            text="FOURTH SCREEN",
+            fontSize = 40.sp
+        )
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="TOTAL COST",
+                fontSize = 30.sp
+            )
+
+            TextField(
+                value=totalcostvalue,
+                onValueChange={totalcostvalue=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Text(
+                text="NET COST",
+                fontSize = 30.sp
+
+            )
+
+            TextField(
+                value=netcostvalue,
+                onValueChange={netcostvalue=it}
+            )
+        }
+
+
+        Row(
+            horizontalArrangement=Arrangement.SpaceEvenly,
+            verticalAlignment=Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            Button(
+                onClick = {navController.navigate(route = "fourth")}
+            )
+            {
+                Text(
+                    text="BACK",
+                    fontSize = 30.sp
+                )
+            }
+
+            Button(
+                onClick = {navController.navigate(route = "fifth")}
+            )
+            {
+                Text(
+                    text="NEXT",
+                    fontSize = 30.sp
+                )
+            }
+
+
+        }
+
+    }
+}
+
+
+@Composable
+fun FifthScreen(productViewModel: ProductViewModel,  navController: NavController)
+{
+
+    var productvalue by remember {mutableStateOf("")}
+    var pricevalue by remember {mutableStateOf("")}
+    var quantityvalue by remember {mutableStateOf("")}
+    var costvalue by remember {mutableStateOf("")}
+    var taxvalue by remember {mutableStateOf("")}
+    var discountvalue by remember {mutableStateOf("")}
+    var totalcostvalue by remember {mutableStateOf("")}
+    var netcostvalue by remember {mutableStateOf("")}
+
+
+    productvalue =productViewModel.product
+    pricevalue =productViewModel.price
+    quantityvalue =productViewModel.quantity
+    costvalue =productViewModel.cost
+    taxvalue =productViewModel.tax
+    discountvalue =productViewModel.discount
+    totalcostvalue =productViewModel.totalcost
+    netcostvalue =productViewModel.netcost
+
+
+
+    Column(
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        Text(
+            text = "FIFTH SCREEN",
+            fontSize = 40.sp
+        )
+
+        OutlinedTextField(
+            value=productvalue,
+            onValueChange={},
+            label={
+                Text(
+                    text="PRODUCT",
+                    fontSize = 30.sp
+                )
+            }
+
+        )
+
+
+        OutlinedTextField(
+            value=pricevalue,
+            onValueChange={pricevalue=it},
+            label={
+                Text(
+                    text="PRICE",
+                    fontSize = 30.sp
+                )
+            }
+
+        )
+
+        OutlinedTextField(
+            value = quantityvalue,
+            onValueChange = {quantityvalue = it},
+            label = {
+                Text(
+                    text = "Quantity:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = costvalue,
+            onValueChange = {costvalue = it},
+            label = {
+                Text(
+                    text = "Cost:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = taxvalue,
+            onValueChange = {taxvalue = it},
+            label = {
+                Text(
+                    text = "Tax:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = discountvalue,
+            onValueChange = {discountvalue = it},
+            label = {
+                Text(
+                    text = "Discount:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = totalcostvalue,
+            onValueChange = {totalcostvalue = it},
+            label = {
+                Text(
+                    text = "Total cost:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = netcostvalue,
+            onValueChange = {netcostvalue = it},
+            label = {
+                Text(
+                    text = "Net cost:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+
+    }
+}
+
+
+
+
+
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    SalesModelAppTheme {
+        Greeting(modifier = Modifier)
+    }
+}
+
