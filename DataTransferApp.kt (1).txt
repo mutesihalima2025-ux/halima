@@ -1,0 +1,744 @@
+package com.example.datatransferapp
+
+import android.icu.text.ListFormatter
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.datatransferapp.ui.theme.DataTransferAppTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            DataTransferAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Greeting(modifier: Modifier = Modifier)
+{
+        val navController = rememberNavController()
+        val studentviewmodel = remember { StudentViewModel() }
+
+        NavHost(navController = navController, startDestination = "first")
+        {
+            composable(route = "first"){FirstScreen(studentviewmodel, navController)}
+            composable(route = "second"){SecondScreen(studentviewmodel, navController)}
+            composable(route = "third"){ThirdScreen(studentviewmodel,navController)}
+            composable(route = "fourth"){FourthScreen(studentviewmodel, navController)}
+            composable(route = "fifth"){FifthScreen(studentviewmodel, navController)}
+        }
+
+}
+
+class StudentViewModel: ViewModel()
+{
+    var regno by  mutableStateOf("")
+    var name by  mutableStateOf("")
+    var faculty by  mutableStateOf("")
+    var course by  mutableStateOf("")
+    var age by  mutableStateOf("")
+    var fees by  mutableStateOf("")
+    var phone by  mutableStateOf("")
+    var email by  mutableStateOf("")
+}
+
+
+
+@Composable
+
+fun FirstScreen(studentviewmodel: StudentViewModel, navController: NavController)
+{
+    Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Cyan)
+          )
+    {
+        Text(
+            text = "FIRST SCREEN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+        Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+           )
+        {
+            Text(
+                text = "REGNO:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.regno,
+                onValueChange = {studentviewmodel.regno = it},
+                label = {
+                    Text(
+                        text = "Regno:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "NAME:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.name,
+                onValueChange = {studentviewmodel.name = it},
+                label = {
+                    Text(
+                        text = "Name:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+           )
+        {
+
+            Button(
+                    onClick = {navController.popBackStack()}
+                  )
+            {
+                Text(
+                    text = "CLOSE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Button(
+                    onClick = {navController.navigate(route = "second")}
+                 )
+            {
+                Text(
+                    text = "NEXT",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+
+    }
+}
+
+
+
+@Composable
+
+fun SecondScreen(studentviewmodel: StudentViewModel, navController: NavController)
+{
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Blue)
+    )
+    {
+        Text(
+            text = "SECOND SCREEN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "FACULTY:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.faculty,
+                onValueChange = {studentviewmodel.faculty = it},
+                label = {
+                    Text(
+                        text = "Faculty:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "COURSE:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.course,
+                onValueChange = {studentviewmodel.course = it},
+                label = {
+                    Text(
+                        text = "Course:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        {
+
+            Button(
+                onClick = {navController.popBackStack()}
+            )
+            {
+                Text(
+                    text = "CLOSE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Button(
+                     onClick = {navController.navigate(route = "third")}
+                  )
+            {
+                Text(
+                    text = "NEXT",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+
+    }
+}
+
+
+
+
+
+@Composable
+
+fun ThirdScreen(studentviewmodel: StudentViewModel, navController: NavController)
+{
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.LightGray)
+    )
+    {
+        Text(
+            text = "THIRD SCREEN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "AGE:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.age,
+                onValueChange = {studentviewmodel.age = it},
+                label = {
+                    Text(
+                        text = "Age:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "FEES:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.fees,
+                onValueChange = {studentviewmodel.fees = it},
+                label = {
+                    Text(
+                        text = "Fees:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        {
+
+            Button(
+                onClick = {navController.popBackStack()}
+            )
+            {
+                Text(
+                    text = "CLOSE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Button(
+                onClick = {navController.navigate(route = "fourth")}
+            )
+            {
+                Text(
+                    text = "NEXT",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+
+    }
+}
+
+
+
+
+
+@Composable
+
+fun FourthScreen(studentviewmodel: StudentViewModel, navController: NavController)
+{
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Magenta)
+    )
+    {
+        Text(
+            text = "FOURTH SCREEN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "PHONE:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.phone,
+                onValueChange = {studentviewmodel.phone = it},
+                label = {
+                    Text(
+                        text = "Phone:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
+        {
+            Text(
+                text = "EMAIL:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            )
+
+            TextField(
+                value = studentviewmodel.email,
+                onValueChange = {studentviewmodel.email = it},
+                label = {
+                    Text(
+                        text = "Email:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        {
+
+            Button(
+                onClick = {navController.popBackStack()}
+            )
+            {
+                Text(
+                    text = "CLOSE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Button(
+                onClick = {navController.navigate(route = "fifth")}
+            )
+            {
+                Text(
+                    text = "NEXT",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+
+    }
+}
+
+
+
+
+
+@Composable
+
+fun FifthScreen(studentviewmodel: StudentViewModel, navController: NavController)
+{
+
+//    var regnoValue by remember { mutableStateOf(studentviewmodel.regno) }
+//    var nameValue by remember { mutableStateOf(studentviewmodel.name) }
+//    var facultyValue by remember { mutableStateOf(studentviewmodel.faculty) }
+//    var courseValue by remember { mutableStateOf(studentviewmodel.course) }
+//    var ageValue by remember { mutableStateOf(studentviewmodel.age) }
+//    var feesValue by remember { mutableStateOf(studentviewmodel.fees) }
+//    var phoneValue by remember { mutableStateOf(studentviewmodel.phone) }
+//    var emailValue by remember { mutableStateOf(studentviewmodel.email) }
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+    )
+    {
+        Text(
+            text = "FIFTH SCREEN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+
+
+        OutlinedTextField(
+            value = studentviewmodel.regno,
+            onValueChange = {studentviewmodel.regno = it},
+            label = {
+                Text(
+                    text = "RegNo:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.name,
+            onValueChange = {studentviewmodel.name = it},
+            label = {
+                Text(
+                    text = "Name:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.faculty,
+            onValueChange = {studentviewmodel.faculty = it},
+            label = {
+                Text(
+                    text = "Faculty:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.course,
+            onValueChange = {studentviewmodel.course = it},
+            label = {
+                Text(
+                    text = "Course:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.age,
+            onValueChange = {studentviewmodel.age = it},
+            label = {
+                Text(
+                    text = "Age:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.fees,
+            onValueChange = {studentviewmodel.fees = it},
+            label = {
+                Text(
+                    text = "Fess:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.phone,
+            onValueChange = {studentviewmodel.phone = it},
+            label = {
+                Text(
+                    text = "Phone:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        OutlinedTextField(
+            value = studentviewmodel.email,
+            onValueChange = {studentviewmodel.email = it},
+            label = {
+                Text(
+                    text = "Email:",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        {
+
+            Button(
+                onClick = {navController.navigate(route = "first")}
+            )
+            {
+                Text(
+                    text = "DONE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+        }
+
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    DataTransferAppTheme {
+        Greeting(
+
+        )
+    }
+}
